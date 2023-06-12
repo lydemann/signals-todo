@@ -15,7 +15,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "signalsTodo",
+            "prefix": "app",
             "style": "camelCase"
           }
         ],
@@ -23,7 +23,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "signals-todo",
+            "prefix": "app",
             "style": "kebab-case"
           }
         ]

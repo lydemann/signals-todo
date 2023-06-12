@@ -1,14 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
+import { TodoListComponent } from './todo-list/todo-list.component';
+import { TodoListService } from './todo-list/todo-list.service';
 
 @Component({
+  selector: 'app-root',
   standalone: true,
-  imports: [NxWelcomeComponent, RouterModule],
-  selector: 'signals-todo-root',
+  imports: [CommonModule, TodoListComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'signals-todo';
+  title = 'web';
+
+  /**
+   *
+   */
+  constructor(todoListService: TodoListService) {
+    todoListService.fetchTodoItems();
+  }
 }
