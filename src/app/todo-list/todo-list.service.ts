@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, delay, map, Observable, of } from 'rxjs';
+import { Injectable, computed, signal } from '@angular/core';
 
 export interface TodoItem {
   id: string;
@@ -15,20 +14,20 @@ export interface TodoListState {
   providedIn: 'root',
 })
 export class TodoListService {
-  state = new BehaviorSubject<TodoListState>({ todoItems: [] });
-  todoItems$: Observable<TodoItem[]> = this.state
-    .asObservable()
-    .pipe(map((state) => state.todoItems));
+  state = signal<TodoListState>({ todoItems: [] });
+
+  todoItems = computed(() => this.state().todoItems);
 
   deleteTodo(todoItemId: string) {
-    const newTodoList = this.state.value.todoItems.filter(
+    const newTodoList = this.state().todoItems.filter(
       (todo) => todo.id !== todoItemId
     );
-    this.state.next({ ...this.state.value, todoItems: newTodoList });
+    this.state.update((state) => ({ ...state, todoItems: newTodoList }));
   }
 
   fetchTodoItems() {
-    this.state.next({
+    this.state.update((state) => ({
+      ...state,
       todoItems: [
         {
           id: '1',
@@ -46,35 +45,34 @@ export class TodoListService {
           isCompleted: false,
         } as TodoItem,
       ],
-    });
+    }));
   }
 
   saveTodo(todoItemToSave: TodoItem) {
     if (todoItemToSave.id) {
       // update
 
-      const updatedTodoList = this.state.value.todoItems.map(todoItem => {
-
-        if(todoItem.id === todoItemToSave.id) {
-          return todoItemToSave
+      const updatedTodoList = this.state().todoItems.map((todoItem) => {
+        if (todoItem.id === todoItemToSave.id) {
+          return todoItemToSave;
         }
         return todoItem;
-      })
-
-      this.state.next({
-        ...this.state.value,
-        todoItems: [...updatedTodoList],
       });
+
+      this.state.update((state) => ({
+        ...state,
+        todoItems: [...updatedTodoList],
+      }));
     } else {
       // create
       const newTodoItem = {
         ...todoItemToSave,
         id: crypto.randomUUID(),
       } as TodoItem;
-      this.state.next({
-        ...this.state.value,
-        todoItems: [...this.state.value.todoItems, newTodoItem],
-      });
+      this.state.update((state) => ({
+        ...state,
+        todoItems: [...state.todoItems, newTodoItem],
+      }));
     }
   }
 }

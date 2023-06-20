@@ -1,17 +1,14 @@
-import { Component, TrackByFunction } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TodoItemComponent } from './todo-item/todo-item.component';
-import { TodoItem, TodoListService } from './todo-list.service';
-import { map, Observable } from 'rxjs';
+import { Component, Signal, TrackByFunction } from '@angular/core';
 import {
-  FormArray,
-  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { TodoItemComponent } from './todo-item/todo-item.component';
+import { TodoItem, TodoListService } from './todo-list.service';
 
 @Component({
   selector: 'app-demo-todo-list',
@@ -21,7 +18,7 @@ import { SharedModule } from '../shared/shared.module';
     <div class="block mb-6">
       <app-todo-item
         class="mb-1"
-        *ngFor="let todoItem of todoItems$ | async; trackBy: todoItemsTrackBy"
+        *ngFor="let todoItem of todoItems(); trackBy: todoItemsTrackBy"
         [todoItem]="todoItem"
         (delete)="onDeleteTodo($event)"
         (edit)="onEdit($event)"
@@ -56,13 +53,13 @@ import { SharedModule } from '../shared/shared.module';
 })
 export class TodoListComponent {
   selectedTodo!: TodoItem | null;
-  todoItems$: Observable<TodoItem[]>;
+  todoItems: Signal<TodoItem[]>;
   formGroup: FormGroup<{
     name: FormControl<string | null>;
   }>;
 
   constructor(private todoListService: TodoListService) {
-    this.todoItems$ = todoListService.todoItems$;
+    this.todoItems = todoListService.todoItems;
 
     this.formGroup = new FormGroup({
       name: new FormControl('', Validators.required),
