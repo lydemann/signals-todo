@@ -1,6 +1,6 @@
 # SignalsTodo
 
-Repo for blog post [The Best Way to Use Signals in Your Angular Apps](//christianlydemann.com/the-best-way-to-use-signals-in-your-angular-apps).
+Repo for blog post [The Best Way to Use Signals in Angular Apps](https://christianlydemann.com/the-best-way-to-use-signals-in-angular-apps/).
 
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 
